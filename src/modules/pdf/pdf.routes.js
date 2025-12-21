@@ -1,16 +1,9 @@
 import { Router } from "express";
-import multer from "multer";
 import auth from "../../middlewares/auth.middleware.js";
 import PDF from "./pdf.model.js";
+import upload from "../../utils/multer.js";
 
 const router = Router();
-
-const storage = multer.diskStorage({
-  destination: "uploads/pdfs",
-  filename: (_, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
-
-const upload = multer({ storage });
 
 router.use(auth);
 
@@ -29,20 +22,5 @@ router.get("/", async (req, res) => {
   const pdfs = await PDF.find({ userId: req.user.id });
   res.json({ success: true, data: pdfs });
 });
-
-
-router.delete("/:id", async (req, res) => {
-  try {
-    await Favorite.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user.id,
-    });
-
-    res.json({ success: true, message: "Removed from favorites" });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
 
 export default router;

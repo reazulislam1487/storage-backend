@@ -1,16 +1,9 @@
 import { Router } from "express";
-import multer from "multer";
 import auth from "../../middlewares/auth.middleware.js";
 import Image from "./image.model.js";
+import upload from "../../utils/multer.js";
 
 const router = Router();
-
-const storage = multer.diskStorage({
-  destination: "uploads/images",
-  filename: (_, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
-
-const upload = multer({ storage });
 
 router.use(auth);
 

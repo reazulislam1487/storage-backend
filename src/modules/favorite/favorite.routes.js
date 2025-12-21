@@ -22,4 +22,17 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    await Favorite.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    res.json({ success: true, message: "Removed from favorites" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 export default router;

@@ -10,3 +10,25 @@ export const login = async (req, res) => {
   const data = await authService.login(req.body);
   res.json({ success: true, data });
 };
+export const changePassword = async (req, res) => {
+  await authService.changePassword(req.user.id, req.body);
+  res.json({ success: true, message: "Password changed successfully" });
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const result = await forgotPassword(req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const result = await resetPassword(req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
