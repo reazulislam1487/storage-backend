@@ -2,9 +2,23 @@ import mongoose from "mongoose";
 
 const favSchema = new mongoose.Schema(
   {
-    itemId: mongoose.Schema.Types.ObjectId,
-    itemType: String, // IMAGE | PDF | NOTE | FOLDER
-    userId: mongoose.Schema.Types.ObjectId,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    itemId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      refPath: "itemType",
+    },
+
+    itemType: {
+      type: String,
+      required: true,
+      enum: ["Note", "PDF", "Image", "Folder"],
+    },
   },
   { timestamps: true }
 );

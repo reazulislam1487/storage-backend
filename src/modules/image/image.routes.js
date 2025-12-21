@@ -21,13 +21,14 @@ router.post("/upload", upload.single("image"), async (req, res) => {
     size: req.file.size,
     userId: req.user.id,
   });
+  console.log("first");
 
-  res.status(201).json({ success: true, data: img });
+  return res.status(201).json({ success: true, data: img });
 });
 
 router.get("/", async (req, res) => {
   const images = await Image.find({ userId: req.user.id });
-  res.json({ success: true, data: images });
+  return res.json({ success: true, data: images });
 });
 
 export default router;

@@ -10,4 +10,4 @@ const pdfSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Pdf", pdfSchema);
+export default mongoose.model("PDF", pdfSchema);

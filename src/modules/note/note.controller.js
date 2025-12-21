@@ -15,15 +15,12 @@ export const getAll = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  const note = await service.updateNote(
-    req.params.id,
-    req.user.id,
-    req.body
-  );
+  const note = await service.updateNote(req.params.id, req.user.id, req.body);
   res.json({ success: true, data: note });
 };
 
 export const remove = async (req, res) => {
+
   await service.deleteNote(req.params.id, req.user.id);
   res.json({ success: true });
 };

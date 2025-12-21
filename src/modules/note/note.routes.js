@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as ctrl from "./note.controller.js";
-import asyncHandler from "../../utils/asyncHandler.js";
 import auth from "../../middlewares/auth.middleware.js";
+import asyncHandler from "../../middlewares/asyncHandler.js";
 
 const router = Router();
 router.use(auth);

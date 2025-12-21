@@ -15,8 +15,11 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const favs = await Favorite.find({ userId: req.user.id });
-  res.json({ success: true, data: favs });
+  const favs = await Favorite.find({ userId: req.user.id }).populate("itemId");
+  res.json({
+    success: true,
+    data: favs,
+  });
 });
 
 export default router;

@@ -18,6 +18,7 @@ export const getFolders = async (userId) => {
    GET SINGLE FOLDER
 ================================ */
 export const getFolderById = async (id, userId) => {
+  console.log(id, userId);
   const folder = await Folder.findOne({ _id: id, userId });
   if (!folder) throw new Error("Folder not found");
   return folder;
