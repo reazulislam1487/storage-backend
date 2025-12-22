@@ -32,3 +32,26 @@ export const resetPassword = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+export const updateName = async (req, res) => {
+  const user = await authService.updateName(req.user.id, req.body);
+
+  res.json({
+    success: true,
+    message: "Name updated successfully",
+    user,
+  });
+};
+
+
+export const deleteAccount = async (req, res) => {
+  const result = await authService.deleteAccount(
+    req.user.id,
+    req.body
+  );
+
+  res.json({
+    success: true,
+    ...result,
+  });
+};

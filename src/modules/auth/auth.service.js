@@ -134,3 +134,35 @@ export const resetPassword = async ({ token, newPassword }) => {
 
   return { message: "Password reset successful" };
 };
+
+export const updateName = async (userId, { name }) => {
+  if (!name || name.trim().length < 2) {
+    throw new Error("Name must be at least 2 characters long");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { name: name.trim() },
+    { new: true }
+  ).select("-password");
+
+  if (!user) throw new Error("User not found");
+
+  return user;
+};
+
+export const deleteAccount = async (userId, { password }) => {
+  if (!password) {
+    throw new Error("Password is required to delete account");
+  }
+
+  const user = await User.findById(userId).select("+password");
+  if (!user) throw new Error("User not found");
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) throw new Error("Incorrect password");
+
+  await User.findByIdAndDelete(userId);
+
+  return { message: "Account deleted successfully" };
+};

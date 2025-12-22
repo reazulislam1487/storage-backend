@@ -23,4 +23,15 @@ router.post(
   asyncHandler(authController.resetPassword)
 );
 
+router.patch(
+  "/update-name",
+  authMiddleware,
+  asyncHandler(authController.updateName)
+);
+
+router.delete(
+  "/delete-account",
+  authMiddleware,
+  asyncHandler(authController.deleteAccount)
+);
 export default router;

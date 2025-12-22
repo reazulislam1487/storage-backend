@@ -9,6 +9,7 @@ import favoriteRoutes from "../modules/favorite/favorite.routes.js";
 import dashboardRoutes from "../modules/dashboard/dashboard.routes.js";
 import searchRoutes from "../modules/search/search.routes.js";
 import securityRoutes from "../modules/security/security.routes.js";
+import calendarRoutes from "../modules/calendar/calendar.routes.js";
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use("/favorites", favoriteRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/search", searchRoutes);
 router.use("/security", securityRoutes);
+router.use("/calendar", calendarRoutes);
 
 export default router;
