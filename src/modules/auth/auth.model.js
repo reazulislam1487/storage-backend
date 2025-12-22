@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema(
     password: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    pin: { type: String }, // hashed PIN
+    isLocked: { type: Boolean, default: false },
   },
 
   { timestamps: true }
