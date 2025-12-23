@@ -5,9 +5,7 @@ import { getCalendarItemsByDate } from "./calendar.service.js";
 const router = Router();
 router.use(auth);
 
-/**
- * GET /calendar/items?date=2025-01-31
- */
+
 router.get("/items", async (req, res) => {
   try {
     const userId = req.user.id;

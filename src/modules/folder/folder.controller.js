@@ -1,8 +1,5 @@
 import * as folderService from "./folder.service.js";
 
-/* ===============================
-   CREATE
-================================ */
 export const createFolder = async (req, res) => {
   const folder = await folderService.createFolder({
     name: req.body.name,
@@ -16,9 +13,6 @@ export const createFolder = async (req, res) => {
   });
 };
 
-/* ===============================
-   GET ALL
-================================ */
 export const getFolders = async (req, res) => {
   const folders = await folderService.getFolders(req.user.id);
 
@@ -28,9 +22,6 @@ export const getFolders = async (req, res) => {
   });
 };
 
-/* ===============================
-   GET ONE
-================================ */
 export const getFolder = async (req, res) => {
   const folder = await folderService.getFolderById(req.params.id, req.user.id);
 
@@ -40,9 +31,6 @@ export const getFolder = async (req, res) => {
   });
 };
 
-/* ===============================
-   UPDATE
-================================ */
 export const updateFolder = async (req, res) => {
   const folder = await folderService.updateFolder(
     req.params.id,
@@ -57,9 +45,7 @@ export const updateFolder = async (req, res) => {
   });
 };
 
-/* ===============================
-   DELETE
-================================ */
+
 export const deleteFolder = async (req, res) => {
   await folderService.deleteFolder(req.params.id, req.user.id);
 

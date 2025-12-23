@@ -78,25 +78,23 @@ export const forgotPassword = async ({ email }) => {
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found");
 
-  //  Generate raw token
   const resetToken = crypto.randomBytes(32).toString("hex");
 
-  //  Hash token before saving
   const hashedToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
 
-  //  Token expiry (15 min)
   user.resetPasswordToken = hashedToken;
   user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
 
   await user.save();
 
-  //  Reset link
-  const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+  const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 
-  //  Send email
+  const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
+  const token = resetToken;
+
   await sendMail({
     to: user.email,
     subject: "Password Reset Request",
@@ -104,6 +102,8 @@ export const forgotPassword = async ({ email }) => {
       <p>You requested a password reset.</p>
       <p>Click the link below to reset your password:</p>
       <a href="${resetUrl}">${resetUrl}</a>
+        <p>For Testing please copy the link and paste in the reset-password body .</p>
+         <p> <b>Copy from Here:</b> ${token}</p>
       <p>This link will expire in 15 minutes.</p>
     `,
   });
@@ -112,21 +112,16 @@ export const forgotPassword = async ({ email }) => {
 };
 
 export const resetPassword = async ({ token, newPassword }) => {
-  //  Hash received token
   const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
   const user = await User.findOne({
     resetPasswordToken: hashedToken,
     resetPasswordExpires: { $gt: Date.now() },
-  }).select("+password");
+  });
 
   if (!user) throw new Error("Token is invalid or expired");
 
-  //  Update password
-  const hashed = await bcrypt.hash(newPassword, 10);
-  user.password = hashed;
-
-  //  Clear token fields
+  user.password = await bcrypt.hash(newPassword, 10);
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
 

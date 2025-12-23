@@ -1,5 +1,6 @@
 import { Router } from "express";
 import auth from "../../middlewares/auth.middleware.js";
+import mongoose from "mongoose";
 
 import Folder from "../folder/folder.model.js";
 import Note from "../note/note.model.js";
@@ -19,14 +20,18 @@ router.get("/", async (req, res) => {
 
   const regex = new RegExp(q, "i");
 
+  // 🔥 string + ObjectId safe match
+  const matchUser = {
+    $or: [{ userId: userId }, { userId: new mongoose.Types.ObjectId(userId) }],
+  };
+
   const [folders, notes, images, pdfs] = await Promise.all([
-    Folder.find({ userId, name: regex }),
-    Note.find({ userId, title: regex }),
-    Image.find({ userId, filename: regex }),
-    Pdf.find({ userId, filename: regex }),
+    Folder.find({ ...matchUser, name: regex }).lean(),
+    Note.find({ ...matchUser, title: regex }).lean(),
+    Image.find({ ...matchUser, filename: regex }).lean(),
+    Pdf.find({ ...matchUser, filename: regex }).lean(),
   ]);
 
-  // 🔁 unified response (UI friendly)
   const results = [
     ...folders.map((f) => ({
       id: f._id,
@@ -54,10 +59,7 @@ router.get("/", async (req, res) => {
     })),
   ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  res.json({
-    success: true,
-    data: results,
-  });
+  res.json({ success: true, data: results });
 });
 
 export default router;

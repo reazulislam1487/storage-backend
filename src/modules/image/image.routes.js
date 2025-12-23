@@ -7,9 +7,6 @@ import { uploadToCloudinary } from "../../utils/uploadToCloudinary.js";
 const router = Router();
 router.use(auth);
 
-/**
- * Upload Image
- */
 router.post("/upload", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, message: "Image required" });
@@ -31,9 +28,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
   res.status(201).json({ success: true, data: img });
 });
 
-/**
- * Get all images
- */
+
 router.get("/", async (req, res) => {
   const images = await Image.find({ userId: req.user.id });
   res.json({ success: true, data: images });
