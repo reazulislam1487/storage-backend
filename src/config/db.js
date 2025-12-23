@@ -1,20 +1,31 @@
 import mongoose from "mongoose";
 
-import dotenv from "dotenv";
+const MONGO_URI = process.env.MONGO_URI;
 
-dotenv.config();
+if (!MONGO_URI) {
+  throw new Error(" MONGO_URI is missing");
+}
 
-const MONGO_URI =
-  process.env.MONGO_URI ||
-  "mongodb+srv://storage_db:gSGpdWN7F68VS9cl@cluster0.siebl7k.mongodb.net/storage_db?retryWrites=true&w=majority&storage_db=Cluster0";
+// Global cache for Vercel
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB Connected");
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
+  if (cached.conn) {
+    return cached.conn;
   }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGO_URI, {
+      bufferCommands: false,
+    });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 };
 
 export default connectDB;

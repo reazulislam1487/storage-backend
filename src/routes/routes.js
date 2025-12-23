@@ -10,9 +10,10 @@ import dashboardRoutes from "../modules/dashboard/dashboard.routes.js";
 import searchRoutes from "../modules/search/search.routes.js";
 import securityRoutes from "../modules/security/security.routes.js";
 import calendarRoutes from "../modules/calendar/calendar.routes.js";
+import dbMiddleware from "../middlewares/db.middleware.js";
 
 const router = Router();
-
+router.use(dbMiddleware);
 router.use("/auth", authRoutes);
 router.use("/folders", folderRoutes);
 router.use("/notes", noteRoutes);
